@@ -1,0 +1,190 @@
+:root {
+    --snow: #FAFAFB;
+    --spanish-pink: #EFB7BA;
+    --dust-storm: #E5C0C8;
+    --soap: #CBD5F0;
+    --yale-blue: #194F92;
+}
+
+* {
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    margin-inline: 15px;
+
+    background-color: var(--snow);
+    color: var(--yale-blue);
+}
+
+
+/* NAVBAR */
+
+nav {
+    height: 50px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 2px solid var(--yale-blue);
+
+    margin-bottom: 20px;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.hamburger-button,
+.mobile-search-button {
+    background: none;
+    border: none;
+
+    color: var(--yale-blue);
+}
+
+.nav-bar-menu,
+.mobile-search-button,
+.navbar-left a {
+    font-size: clamp(1rem, 5vw, 2rem);
+}
+
+.navbar-left a {
+    color: var(--yale-blue);
+    text-decoration: none;
+}
+
+nav ul,
+.search-input {
+    display: none;
+}
+
+.search-input {
+    height: 75%;
+
+    background-color: var(--snow);
+    color: var(--yale-blue);
+
+    border: 1px solid var(--soap);
+    border-radius: 6px;
+}
+
+.search-input::placeholder {
+    color: rgba(25, 79, 146, 0.6);
+}
+
+
+/* FILTER RESULTS */
+
+.filter-form {
+    display: none;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+
+/* ACTIVITY SECTION */
+
+.stats-activity-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+.stats-activity-container h3 {
+    margin-bottom: 10px;
+
+    color: var(--yale-blue);
+}
+
+.activity-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.activity-card {
+    background-color: var(--yale-blue);
+
+    border-radius: 6px;
+
+    width: 6rem;
+    height: 4em;
+
+    padding: 5px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    color: var(--snow);
+}
+
+.activity-info {
+    font-size: 2em;
+
+    color: var(--soap);
+}
+
+
+/* GAME CONTAINERS */
+
+.game-container {
+    background-color: var(--soap);
+    color: var(--yale-blue);
+
+    border-radius: 8px;
+
+    padding: 10px;
+
+    margin-bottom: 20px;
+}
+
+.finder-title{
+    font-size: 1.5rem;
+}
+.underline{
+    text-decoration: none;
+    color: inherit;
+}
+.card-top{
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--yale-blue);
+}
+
+.card-number{
+    font-size: 2rem;
+}
+.card-main-container{
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    grid-template-rows: 40px repeat(4,75px);
+    align-items: center;
+    justify-items: center;
+}
+.card-main-container span{
+    align-self: center;
+}
+.card-container{
+    display: flex;
+    width: 100%;
+    height: 75%;
+    justify-content: space-around;
+    align-items: center;
+}
+.card-container img{
+    background-color: var(--spanish-pink);
+    width: 4rem;
+    height: 3.75rem;
+}
+.card-middle .card-game-release{
+    font-size: .8rem;
+}
