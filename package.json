@@ -1,0 +1,31 @@
+{
+  "name": "robloyze",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test",
+    "db:check": "node src/scripts/check-db.js",
+    "roblox:check": "node src/scripts/check-roblox.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/banmni/RobloxAnalyzer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/banmni/RobloxAnalyzer/issues"
+  },
+  "homepage": "https://github.com/banmni/RobloxAnalyzer#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mysql2": "^3.24.2",
+    "node-cron": "^4.6.0"
+  }
+}

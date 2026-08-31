@@ -1,5 +1,5 @@
 :root {
-    --snow: #FAFAFB;
+    --snow: #f1f1f1;
     --spanish-pink: #EFB7BA;
     --dust-storm: #E5C0C8;
     --soap: #CBD5F0;
@@ -107,7 +107,7 @@ nav ul,
 .activity-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 .activity-card {
@@ -115,7 +115,7 @@ nav ul,
 
     border-radius: 6px;
 
-    width: 6rem;
+    width: 30%;
     height: 4em;
 
     padding: 5px;
@@ -161,6 +161,8 @@ nav ul,
     border-bottom: 2px solid var(--yale-blue);
 }
 
+
+
 .card-number{
     font-size: 2rem;
 }
@@ -197,4 +199,94 @@ nav ul,
 
     margin-bottom: 10px;
     padding-bottom: 10px;
+}
+
+/* 650px+ */
+@media (min-width: 650px) {
+
+    nav{
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    /* leaderboards */
+    main {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .game-container {
+        width: 45%;
+    }
+
+    /* activity stats */
+    .activity-container {
+        justify-content: flex-start;
+        margin-bottom: 40px;
+    }
+
+    .activity-card {
+        width: 6rem;
+        margin-left: 20px;
+    }
+}
+
+
+/* 768px+ */
+@media (min-width: 768px) {
+
+    /* navbar */
+    .hamburger-button,
+    .mobile-search-button {
+        display: none;
+    }
+
+    nav .search-input {
+        display: block;
+        width: min(50%, 35%);
+        border: 2px solid var(--yale-blue);
+
+    }
+
+    .navbar-left {
+        margin-right: 10%;
+    }
+
+    nav ul {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: min(450px, 100%);
+        height: 100%;
+        margin-right: 20px;
+    }
+
+    nav ul li {
+        list-style: none;
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: var(--yale-blue);
+        font-size: 1.5rem;
+    }
+
+    nav ul li:hover {
+        text-decoration: underline;
+        text-decoration-thickness: 4px;
+    }
+}
+
+
+/* 1050px+ */
+@media (min-width: 1050px) {
+
+    /* leaderboards */
+    main {
+        justify-content: space-around;
+    }
+
+    .game-container {
+        width: 30%;
+    }
 }
