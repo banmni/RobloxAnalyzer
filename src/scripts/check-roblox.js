@@ -1,13 +1,13 @@
-import { getExperienceDetails } from "../services/roblox-api.js";
+import { getExperienceMetrics } from "../services/roblox-api.js";
 
 const universeId = process.argv[2];
-console.log(universeId)
+
 if (!universeId) {
   console.error("Usage: npm run roblox:check -- <universeId>");
   process.exitCode = 1;
 } else {
   try {
-    const experiences = await getExperienceDetails([universeId]);
+    const experiences = await getExperienceMetrics([universeId]);
 
     if (experiences.length === 0) {
       console.log("Roblox did not return an experience for that universe ID");
@@ -22,6 +22,9 @@ if (!universeId) {
         playing: experience.playing,
         visits: experience.visits,
         favorites: experience.favoritedCount,
+        upVotes: experience.upVotes,
+        downVotes: experience.downVotes,
+        iconUrl: experience.iconUrl,
         created: experience.created,
         updated: experience.updated,
       });

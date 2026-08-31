@@ -1,46 +1,112 @@
-const game_base_url = "https://games.roblox.com"
-const request_timeout_ms = 10_000;
-const max_universe_id_per_request = 50;
+import { requestRobloxJson } from "./roblox-requests.js";
 
-export async function getExperienceDetails(universeIds){
-    if (!Array.isArray(universeIds) || universeIds.length === 0) {
-        throw new TypeError("universeIds must be a non-empty array");
-    }
-    if (universeIds.length > max_universe_id_per_request) {
+const GAMES_BASE_URL = "https://games.roblox.com"
+const MAX_UNIVERSE_ID_PER_REQUEST = 50;
+const THUMBNAILS_BASE_URL = "https://thumbnails.roblox.com"
+
+// return an array with no spaces and no special characters universeid
+function normalizeUniverseIds(universeIds) {
+  if (!Array.isArray(universeIds) || universeIds.length === 0) {
+    throw new TypeError("universeIds must be a non-empty array");
+  }
+
+  if (universeIds.length > MAX_UNIVERSE_ID_PER_REQUEST) {
     throw new RangeError(
-      `A maximum of ${max_universe_id_per_request} universe IDs is allowed`,
+      `A maximum of ${MAX_UNIVERSE_ID_PER_REQUEST} universe IDs is allowed`,
     );
   }
 
-  const normalizedIds = universeIds.map((universeId) => {
+  return universeIds.map((universeId) => {
     const value = String(universeId).trim();
+
     if (!/^\d+$/.test(value)) {
       throw new TypeError(`Invalid universe ID: ${universeId}`);
     }
 
     return value;
   });
+}
 
-  const url = new URL("/v1/games", game_base_url);
-  url.searchParams.set("universeIds", normalizedIds.join(","));
-
-  const response = await fetch(url, {
-    headers: {
-      Accept: "application/json",
-    },
-    signal: AbortSignal.timeout(request_timeout_ms),
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      `Roblox request failed with HTTP status ${response.status}`,
-    );
-  }
-
-  const body = await response.json();
+// returns the data from the body
+function readDataArray(body, responseName) {
   if (!body || !Array.isArray(body.data)) {
-    throw new Error("Roblox returned an unexpected game-details response");
+    throw new Error(`Roblox returned an unexpected ${responseName} response`);
   }
 
   return body.data;
 }
+
+// asks the api with the game url for information about the game
+export async function getExperienceDetails(universeIds) {
+  const normalizedIds = normalizeUniverseIds(universeIds);
+
+  const url = new URL("/v1/games", GAMES_BASE_URL);
+  url.searchParams.set("universeIds", normalizedIds.join(","));
+
+  const body = await requestRobloxJson(url);
+
+  return readDataArray(body, "game-details");
+}
+// gets the vote data of game
+export async function getExperienceVotes(universeIds) {
+  const normalizedIds = normalizeUniverseIds(universeIds);
+
+  const url = new URL("/v1/games/votes", GAMES_BASE_URL);
+  url.searchParams.set("universeIds", normalizedIds.join(","));
+
+  const body = await requestRobloxJson(url);
+
+  return readDataArray(body, "votes");
+}
+//  get the thumbnail of the game
+export async function getExperienceIcons(universeIds) {
+  const normalizedIds = normalizeUniverseIds(universeIds);
+
+  const url = new URL("/v1/games/icons", THUMBNAILS_BASE_URL);
+
+  url.searchParams.set("universeIds", normalizedIds.join(","));
+  url.searchParams.set("returnPolicy", "PlaceHolder");
+  url.searchParams.set("size", "150x150");
+  url.searchParams.set("format", "Png");
+  url.searchParams.set("isCircular", "false");
+
+  const body = await requestRobloxJson(url);
+
+  return readDataArray(body, "game-icons");
+}
+
+//  gets the information, votes, and thumbnail of the game
+export async function getExperienceMetrics(universeIds) {
+  const normalizedIds = normalizeUniverseIds(universeIds);
+
+  const [details, votes, icons] = await Promise.all([
+    getExperienceDetails(normalizedIds),
+    getExperienceVotes(normalizedIds),
+    getExperienceIcons(normalizedIds),
+  ]);
+
+  const votesByUniverseId = new Map(
+    votes.map((vote) => [String(vote.id), vote]),
+  );
+
+  const iconsByUniverseId = new Map(
+    icons.map((icon) => [String(icon.targetId), icon]),
+  );
+
+  return details.map((experience) => {
+    const universeId = String(experience.id);
+    const experienceVotes = votesByUniverseId.get(universeId);
+    const experienceIcon = iconsByUniverseId.get(universeId);
+
+    return {
+      ...experience,
+      upVotes: experienceVotes?.upVotes ?? null,
+      downVotes: experienceVotes?.downVotes ?? null,
+      iconUrl:
+        experienceIcon?.state === "Completed"
+          ? experienceIcon.imageUrl
+          : null,
+    };
+  });
+}
+
